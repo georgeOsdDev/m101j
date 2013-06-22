@@ -1,0 +1,53 @@
+use m101j
+
+db.city.aggregate([
+	{
+		$match:{
+			$or:[{'state':'CT'},{'state':'NJ'}]
+		}
+	},
+	{
+		$group:{
+			"_id":{"state":"$state","city":"$city"},
+			pop:{$sum:"$pop"}
+		}
+	},
+	{
+		$match:{
+			"pop":{$gt:25000}
+		}
+	},
+	{
+		$group:{
+			"_id":0,
+			"avg_pop":{$avg:"$pop"}
+		}
+	},
+	{$sort:{"pop":-1}}
+])
+
+db.city.aggregate([
+	{
+		$match:{
+			$or:[{'state':'CA'},{'state':'NY'}]
+		}
+	},
+	{
+		$group:{
+			"_id":{"state":"$state","city":"$city"},
+			pop:{$sum:"$pop"}
+		}
+	},
+	{
+		$match:{
+			"pop":{$gt:25000}
+		}
+	},
+	{
+		$group:{
+			"_id":0,
+			"avg_pop":{$avg:"$pop"}
+		}
+	},
+	{$sort:{"pop":-1}}
+])
